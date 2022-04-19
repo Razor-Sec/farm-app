@@ -4,8 +4,6 @@ services:
   mongo:
     container_name: mongodb
     image: mongo:4
-    env_file:
-      - ./.env
     networks:
       - farm-net
     ports:
