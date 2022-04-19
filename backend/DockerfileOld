@@ -1,0 +1,15 @@
+FROM python:3.9
+#RUN adduser -D razor
+#RUN apk add python3-dev
+
+#USER razor
+WORKDIR /app
+COPY ./requirements.txt requirements.txt
+RUN pip3 install --upgrade pip --no-warn-script-location
+RUN pip3 install -r requirements.txt --no-warn-script-location
+
+#ENV PATH="/home/razor/.local/bin:${PATH}"
+COPY . .
+EXPOSE 9090
+ENTRYPOINT ["uvicorn"]
+CMD ["main:app", "--reload" , "--port" , "8000"]

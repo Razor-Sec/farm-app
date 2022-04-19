@@ -1,0 +1,43 @@
+version: "3.3"
+services:
+
+  mongo:
+    container_name: mongodb
+    image: mongo:4
+    env_file:
+      - ./.env
+    networks:
+      - farm-net
+    ports:
+      - 27017:27017
+
+  backend-farm:
+    container_name: backend-farm
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    networks:
+      - farm-net
+    volumes:
+      - backend-vol:/app
+    ports:
+      - 8081:80
+   
+  frontend-farm:
+    container_name: frontend-farm
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    networks:
+      - farm-net
+    volumes:
+      - frontend-vol:/app
+    ports:
+      - 3000:3000
+
+volumes:
+  backend-vol:
+  frontend-vol:
+networks:
+  farm-net:
+    driver: bridge

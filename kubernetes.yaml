@@ -1,0 +1,128 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: farm
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-farm
+  namespace: farm
+  labels:
+    app: backend-farm
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: backend-farm
+  template:
+    metadata:
+      namespace: farm
+      labels:
+        app: backend-farm
+    spec:
+      containers:
+        - name: backend-farm
+          image: razorcyber/backend-farm:v1
+          ports:
+            - containerPort: 80
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: "250m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: farm
+  name: backend-farm-svc
+spec:
+  selector:
+    app: backend-farm
+  ports:
+    - protocol: "TCP"
+      port: 80
+      targetPort: 80
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: farm
+  name: mongo-farm
+  labels:
+    app: mongo-farm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo-farm
+  template:
+    metadata:
+      labels:
+        app: mongo-farm
+    spec:
+      containers:
+        - name: mongo-farm
+          image: mongo:4
+          ports:
+            - containerPort: 27017
+          imagePullPolicy: Always
+          resources: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+  namespace: farm
+spec:
+  selector:
+    app: mongo-farm
+  ports:
+    - protocol: "TCP"
+      port: 27017
+      targetPort: 27017
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: farm
+  name: frontend-farm
+  labels:
+    app: frontend-farm
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: frontend-farm
+  template:
+    metadata:
+      labels:
+        app: frontend-farm
+    spec:
+      containers:
+        - name: frontend-farm
+          image: razorcyber/frontend-farm:v1
+          ports:
+            - containerPort: 3000
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: "250m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: farm
+  name: frontend-farm-svc
+spec:
+  selector:
+    app: frontend-farm
+  ports:
+    - protocol: "TCP"
+      port: 3001
+      targetPort: 3000
+  type: NodePort
+---

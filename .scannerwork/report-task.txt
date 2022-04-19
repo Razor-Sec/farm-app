@@ -1,0 +1,6 @@
+projectKey=Farm-Scan
+serverUrl=http://localhost:9000
+serverVersion=9.3.0.51899
+dashboardUrl=http://localhost:9000/dashboard?id=Farm-Scan
+ceTaskId=AYAjta5ap5qb-oCVsr2T
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AYAjta5ap5qb-oCVsr2T
