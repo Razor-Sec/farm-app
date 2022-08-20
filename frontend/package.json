@@ -44,5 +44,5 @@
     "path": false,
     "os": false
   },
-    "proxy" : "http://backend-farm-svc:80"
+    "proxy" : "http://backend-farm"
 }
